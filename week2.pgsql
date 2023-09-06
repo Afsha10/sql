@@ -73,3 +73,20 @@ SELECT reservations.room_no, checkout_date-checkin_date AS less_than_10_nights F
 SELECT reservations.room_no, checkout_date-checkin_date AS less_than_10_nights FROM reservations WHERE checkout_date-checkin_date < 10 GROUP BY reservations.room_no, less_than_10_nights ORDER BY room_no;
 
 -- -----------------------------------
+
+SELECT * FROM customers;
+INSERT INTO customers (name, email, address, city, postcode, country) VALUES ('John Smith', 'j.smith@johnsmith.org', '11 New Road', 'Liverpool', 'L10 2AB', 'UK');
+SELECT * FROM customers WHERE name = 'John Smith';
+
+-- Exercise 3 #1
+
+INSERT INTO customers (name, email, address, city, postcode, country) VALUES ('Queen Afsha', 'q.afsha@afsha.org', '9 New Castle', 'Tomatopool', 'H3 1L0', 'UK');
+SELECT * FROM customers WHERE name = 'Queen Afsha';
+
+-- Exercise 3 #2
+
+SELECT * FROM room_types;
+INSERT INTO room_types(room_type, def_rate) VALUES ('PENTHOUSE', 185.00);
+SELECT * FROM room_types WHERE room_type = 'PENTHOUSE';
+
+-- -----------------------------------
