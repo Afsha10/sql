@@ -480,3 +480,140 @@ WHERE
 DELETE FROM customers
 WHERE name = 'Juri Yoshido';
 
+-- -----------------------------------
+-- JOIN
+-- Exercise 6 #1
+SELECT
+  r.cust_id,
+  r.room_no,
+  i.invoice_date,
+  i.total
+FROM
+  reservations r
+  JOIN invoices i ON (r.id = i.res_id);
+
+SELECT
+  r.cust_id,
+  r.room_no,
+  i.invoice_date,
+  i.total
+FROM
+  reservations r
+  JOIN invoices i ON (i.res_id = r.id)
+WHERE
+  r.checkin_date > '2018-07-01'
+  AND i.total < 500
+ORDER BY
+  i.invoice_date DESC,
+  r.cust_id;
+
+SELECT
+  c.name,
+  c.phone,
+  c.email,
+  i.invoice_date,
+  i.total
+FROM
+  customers c
+  JOIN reservations r ON (r.cust_id = c.id)
+  JOIN invoices i ON (r.id = i.res_id)
+WHERE
+  i.invoice_date < CURRENT_DATE - interval '1 month'
+  AND i.paid = FALSE
+ORDER BY
+  i.invoice_date DESC,
+  c.id;
+
+SELECT
+  c.name,
+  c.phone,
+  c.email,
+  i.invoice_date,
+  i.total
+FROM
+  customers c
+  INNER JOIN reservations r ON (r.cust_id = c.id)
+  INNER JOIN invoices i ON (r.id = i.res_id)
+WHERE
+  i.invoice_date < CURRENT_DATE - interval '1 month'
+  AND i.paid = FALSE
+ORDER BY
+  i.invoice_date DESC,
+  c.id;
+
+-- Exercise 6 #2
+SELECT
+  *
+FROM
+  customers;
+
+SELECT
+  *
+FROM
+  reservations;
+
+SELECT
+  *
+FROM
+  rooms;
+
+SELECT
+  c.id,
+  c.name,
+  c.email,
+  c.phone,
+  c.address,
+  c.city,
+  c.postcode,
+  c.country,
+  re.room_no,
+  re.checkin_date,
+  re.checkout_date,
+  re.no_guests
+FROM
+  customers c
+  INNER JOIN reservations re ON (re.cust_id = c.id)
+WHERE
+  re.room_no = 111;
+
+-- Exercise 6 #3
+SELECT
+  c.name,
+  c.country,
+  ro.room_no,
+  ro.room_type,
+  rot.def_rate,
+  re.checkout_date - re.checkin_date AS "nights stay",
+  re.checkout_date AS "departure dates"
+FROM
+  customers c
+  INNER JOIN reservations re ON (re.cust_id = c.id)
+  INNER JOIN rooms ro ON (ro.room_no = re.room_no)
+  INNER JOIN room_types rot ON (rot.room_type = ro.room_type)
+WHERE
+  c.country = 'UK';
+
+-- Exercise 6 #4
+SELECT
+  c.name,
+  c.phone,
+  c.email,
+  r.id,
+  r.cust_id,
+  r.room_no,
+  r.checkin_date,
+  r.checkout_date,
+  r.no_guests,
+  r.booking_date,
+  i.total,
+  i.invoice_date,
+  i.paid
+FROM
+  customers c
+  INNER JOIN reservations r ON (c.id = r.cust_id)
+  INNER JOIN invoices i ON (i.res_id = r.id)
+WHERE
+  c.name = 'Mary Saveley';
+
+-- -----------------------------------
+-- Exercise 7 #1
