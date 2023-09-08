@@ -397,3 +397,86 @@ WHERE
   id = 96;
 
 -- -----------------------------------
+-- Deleting Row
+-- To solve this I had to do bottom to top:
+SELECT
+  *
+FROM
+  reservations
+WHERE
+  id = 4;
+
+DELETE FROM reservations
+WHERE id = 4;
+
+SELECT
+  *
+FROM
+  invoices
+WHERE
+  res_id = 4;
+
+DELETE FROM invoices
+WHERE res_id = 4;
+
+-- Exercise 5 #1
+-- To solve this I had to do bottom to top:
+SELECT
+  *
+FROM
+  customers
+LIMIT 5;
+
+SELECT
+  *
+FROM
+  customers
+WHERE
+  id = 108;
+
+DELETE FROM customers
+WHERE id = 108;
+
+SELECT
+  *
+FROM
+  reservations
+WHERE
+  cust_id = 108
+  AND room_no IS NULL;
+
+DELETE FROM reservations
+WHERE cust_id = 108
+  AND room_no IS NULL;
+
+-- Exercise 5 #2
+-- To solve this I had to do bottom to top:
+SELECT
+  *
+FROM
+  customers
+WHERE
+  name = 'Juri Yoshido';
+
+SELECT
+  *
+FROM
+  reservations
+WHERE
+  cust_id = 96;
+
+DELETE FROM reservations
+WHERE cust_id = 96;
+
+-- Exercise 5 #3
+-- To solve this I had to do bottom to top:
+SELECT
+  *
+FROM
+  customers
+WHERE
+  name = 'Juri Yoshido';
+
+DELETE FROM customers
+WHERE name = 'Juri Yoshido';
+
