@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// require("dotenv").config();
+require("dotenv").config();
 
 const app = express();
 
@@ -9,11 +9,11 @@ const { Pool } = require("pg");
 // console.log(process.env.POSTGRES_PASSWORD);
 
 const db = new Pool({
-  user: "",
-  host: "localhost",
-  database: "cyf_hotels",
-  password: "",
-  port: 5432
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
 });
 
 app.get("/", function (req, res) {
