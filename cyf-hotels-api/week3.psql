@@ -1,0 +1,7 @@
+SELECT * FROM customers;
+
+SELECT * FROM customers WHERE id = 17;
+
+SELECT * FROM customers WHERE city ILIKE 'manch%';
+
+SELECT * FROM customers WHERE name ILIKE '%king%';

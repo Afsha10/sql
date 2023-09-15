@@ -14,13 +14,16 @@ const db = new Pool({
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT,
+  // ssl: true
 });
 
 app.get("/", function (req, res) {
   res.send("<h1>Hotel Database Project Home Page</h1>");
 });
 
-// getting customers' full data
+// Exercise 1 # 1:
+
+// getting all customers' full data
 app.get("/customers", function (req, res) {
   db.query("SELECT * FROM customers")
     .then((result) => {
@@ -31,7 +34,7 @@ app.get("/customers", function (req, res) {
     });
 });
 
-// getting customer data by id practicing with logging
+// getting a single customer's data by id practicing with logging
 
 // app.get("/customers/:id", function (req, res) {
 //   const custId = parseInt(req.params.id);
@@ -44,7 +47,7 @@ app.get("/customers", function (req, res) {
 //     });
 // });
 
-// getting customer data by id (CYF way)
+// getting a single customer's data by id (CYF way)
 
 // app.get("/customers/:id", function (req, res) {
 //   const custId = parseInt(req.params.id);
@@ -57,7 +60,9 @@ app.get("/customers", function (req, res) {
 //     });
 // });
 
-// getting customer data by id (Keith's way)
+// Exercise 1 # 2:
+
+// getting a single customer's data by id (Keith's way)
 
 app.get("/customers/:id", function (req, res) {
   const custId = parseInt(req.params.id);
@@ -80,12 +85,12 @@ app.get("/customers/:id", function (req, res) {
 app.get("/customers/by_city/:city", (req, res) => {
   const cityName = req.params.city;
   db.query("SELECT * FROM customers WHERE city ILIKE $1 || '%'", [cityName])
-      .then((result) => {
-        res.json(result.rows);
-      })
-      .catch((error) => {
-        res.status(400).json(error);
-      });
+    .then((result) => {
+      res.json(result.rows);
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
 });
 
 // getting customers data by city (Keith's way)
@@ -95,6 +100,39 @@ app.get("/customers/by_city/:city", function (req, res) {
   db.query(
     "SELECT * FROM customers WHERE city ILIKE $1 || '%'",
     [cityName],
+    (error, result) => {
+      if (error == undefined) {
+        res.json(result.rows);
+      } else {
+        console.log(error);
+        res.status(400).json(error);
+      }
+    }
+  );
+});
+
+// Exercise 1 # 3a:
+
+app.get("/customers/by_name/:name", (req, res) => {
+  const custName = req.params.name;
+  db.query("SELECT * FROM customers WHERE name ILIKE $1 || '%'", [custName])
+    .then((result) => {
+      res.json(result.rows);
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+});
+
+// Exercise 1 # 3b:
+
+// getting a single customer's data by id (Keith's way)
+
+app.get("/customers/by_name/:name", function (req, res) {
+  const custName = req.params.name;
+  db.query(
+    "SELECT * FROM customers WHERE name ILIKE $1 || '%'",
+    [custName],
     (error, result) => {
       if (error == undefined) {
         res.json(result.rows);
