@@ -138,6 +138,7 @@ SELECT
 FROM
   reservations;
 
+-----------Week 3------------
 -- -------------------------------------
 -- Grouping Rows for Aggregation
 SELECT
@@ -616,4 +617,11 @@ WHERE
   c.name = 'Mary Saveley';
 
 -- -----------------------------------
+
+SELECT room_no, rate, coalesce(room_type, 'None') type
+  FROM rooms
+  WHERE no_guests IS NULL;
+
+SELECT * FROM rooms;
+
 -- Exercise 7 #1

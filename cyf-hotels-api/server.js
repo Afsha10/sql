@@ -6,6 +6,10 @@ const app = express();
 
 const { Pool } = require("pg");
 
+app.use(bodyParser.json());
+
+app.use(express.json());
+
 // console.log(process.env.POSTGRES_PASSWORD);
 
 const db = new Pool({
@@ -113,6 +117,8 @@ app.get("/customers/by_city/:city", function (req, res) {
 
 // Exercise 1 # 3a:
 
+// getting a single customer's data by id (CYF way)
+
 app.get("/customers/by_name/:name", (req, res) => {
   const custName = req.params.name;
   db.query("SELECT * FROM customers WHERE name ILIKE $1 || '%'", [custName])
@@ -143,6 +149,80 @@ app.get("/customers/by_name/:name", function (req, res) {
     }
   );
 });
+
+// this endpoint will create a new customers info row using CYF way
+
+// app.post("/customers", function (req, res) {
+//   const newName = req.body.name;
+//   const newEmail = req.body.email;
+//   const newPhone = req.body.phone;
+//   const newAddress = req.body.address;
+//   const newCity = req.body.city;
+//   const newPostcode = req.body.postcode;
+//   const newCountry = req.body.country;
+
+//   const query = `INSERT INTO customers (name, email, phone, address, city, postcode, country)
+//     VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+//   db.query(query, [
+//     newName,
+//     newEmail,
+//     newPhone,
+//     newAddress,
+//     newCity,
+//     newPostcode,
+//     newCountry,
+//   ])
+//     .then(() => {
+//       res.status(201).send("Created a new customer");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
+// Exercise 2
+
+// app.post("/customers", (req, res) => {
+//   const newName = req.body.name;
+//   const newEmail = req.body.email;
+//   const newPhone = req.body.phone;
+//   const query =
+//     `INSERT INTO customers (name, email, phone) VALUES ($1, $2, $3)`;
+//   db.query(query, [
+//     newName,
+//     newEmail,
+//     newPhone
+//   ])
+//     .then(() => {
+//       res.status(201).send("New customer added");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
+// creating new customer's row and returning the ID of that row using Keith's way
+
+app.post("/customers", (req, res) => {
+  const newName = req.body.name;
+  const newEmail = req.body.email;
+  const newPhone = req.body.phone;
+  const newCountry = req.body.country;
+
+  const query = `INSERT INTO customers (name, email, phone, country) VALUES ($1, $2, $3, $4) RETURNING id`;
+
+  console.log("Hello World!");
+  db.query(query, [newName, newEmail, newPhone, newCountry], (err, result) => {
+    const newId = result.rows[0].id;
+    res
+      .status(201)
+      .send(`Customer created. New ID = ${newId}`)
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  });
+});
+
 
 app.listen(3000, function () {
   console.log("Server is listening on port 3000. Ready to accept requests!");
